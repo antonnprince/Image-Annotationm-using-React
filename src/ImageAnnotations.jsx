@@ -4,8 +4,9 @@ import IMAGE_URL from './h2.png'
 import './App.css';
 
 const ImageAnnotations = () => {
+    
     const [annotations, setAnnotations] = useState([]);
-  const [annotation, setAnnotation] = useState({});
+    const [annotation, setAnnotation] = useState({});
 
   const onChange = (annotation) => {
     setAnnotation(annotation);
