@@ -37,7 +37,7 @@ const ImageAnnotations = () => {
       geometry: { ...geometry },
       data: { ...data, id: Math.random() }
     };
-  console.log(newAnnotation)
+  //console.log(newAnnotation)
     // Update X, Y, Height, and Width
     setX(geometry.x);
     setY(geometry.y);
