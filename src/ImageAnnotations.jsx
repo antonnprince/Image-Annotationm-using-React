@@ -61,6 +61,8 @@ const ImageAnnotations = () => {
   const onSend = () => {
     const newObj = { ...annotations };
     console.log(newObj);
+    setAnnotations([]);
+    setAnnotation({})
 
   };
 
@@ -83,7 +85,7 @@ const ImageAnnotations = () => {
             <img
               key={index}
               src={image}
-              alt={`Preview ${index}`}
+              alt={`Preview of ${index}th test image`}
               className="main"
               onClick={() => handleImageClick(index)}
             />
