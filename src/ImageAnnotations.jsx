@@ -61,29 +61,42 @@ const ImageAnnotations = () => {
   const onSend = () => {
     const newObj = { ...annotations };
     console.log(newObj);
+
   };
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>Image Annotation</h1>
-        <input type="file" accept="image/*" onChange={handleImageUpload} multiple />
+        {
+          selectedImageIndex===null && (
+            <input type="file" accept="image/*" onChange={handleImageUpload} multiple />
+          )
+          
+        }
+        
         <div className="image-previews">
-          {images.map((image, index) => (
+          {
+            
+            images.map((image, index) => (
+            <div className='container'>
             <img
               key={index}
               src={image}
               alt={`Preview ${index}`}
-              className={selectedImageIndex === index ? 'selected' : ''}
+              className="main"
               onClick={() => handleImageClick(index)}
             />
-          ))}
+            </div>
+          ))
+          }
         </div>
         {selectedImageIndex !== null && (
           <>
             <Annotation
               src={images[selectedImageIndex]}
               alt='Uploaded Image'
+              className="selected"
               annotations={annotations}
               value={annotation}
               onChange={onChange}
