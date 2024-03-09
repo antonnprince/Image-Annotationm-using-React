@@ -31,24 +31,27 @@ const ImageAnnotations = () => {
 
   const onSubmit = (annotation) => {
     const { geometry, data } = annotation;
-    console.log(geometry);
-    console.log(data)
-    setX(geometry.x)
-    setY(geometry.y)
-    setH(geometry.height)
-    setW(geometry.width)
+  
+    // Store current annotation values
+    const newAnnotation = {
+      geometry: { ...geometry },
+      data: { ...data, id: Math.random() }
+    };
+  console.log(newAnnotation)
+    // Update X, Y, Height, and Width
+    setX(geometry.x);
+    setY(geometry.y);
+    setH(geometry.height);
+    setW(geometry.width);
+  
+    // Add new annotation to the array
+    setAnnotations((prevAnnotations) => [...prevAnnotations, newAnnotation]);
+  };
 
-    setAnnotation({});
-    setAnnotations([...annotations, {
-      geometry,
-      data: {
-        ...data,
-        id: Math.random()
-      }
-    }]);
+  const onSend=()=>{
+    const newObj = {...annotations}
+    console.log(newObj)
   }
-
-
   return (
     <div className="App">
       <header className="App-header">
@@ -75,6 +78,10 @@ const ImageAnnotations = () => {
                 <br/>
                 width: {W}
               </p>
+
+              <button onClick={onSend}>
+
+              </button>
           </>
         )}
         
