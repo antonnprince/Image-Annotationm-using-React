@@ -44,10 +44,12 @@ const ImageAnnotations = () => {
 
     // Store current annotation values
     const newAnnotation = {
+      image: images[selectedImageIndex],
       geometry: { ...geometry },
       data: { ...data, id: Math.random() }
     };
 
+      console.log(images)
     // Update X, Y, Height, and Width
     setX(geometry.x);
     setY(geometry.y);
