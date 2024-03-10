@@ -46,7 +46,7 @@ const ImageAnnotations = () => {
     const newAnnotation = {
       image: images[selectedImageIndex],
       geometry: { ...geometry },
-      data: { ...data, id: Math.random() }
+      data: { ...data }
     };
 
       console.log(images)
