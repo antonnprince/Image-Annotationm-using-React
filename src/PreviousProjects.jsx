@@ -3,7 +3,7 @@ import React from 'react'
 const PreviousProjects = () => {
   return (
     <div>
-      All Projects
+      All Projects will be displayed here
     </div>
   )
 }

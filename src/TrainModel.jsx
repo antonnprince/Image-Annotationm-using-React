@@ -3,7 +3,7 @@ import React from 'react'
 const TrainModel = () => {
   return (
     <div>
-      Train Model
+      Images can be picked and sent for prediction. Final response will be shown
     </div>
   )
 }

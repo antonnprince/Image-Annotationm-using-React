@@ -7,6 +7,7 @@ const ImageAnnotations = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [annotations, setAnnotations] = useState([]);
   const [annotation, setAnnotation] = useState({});
+  const[name,setName] = useState("")
   const [X, setX] = useState(0);
   const [Y, setY] = useState(0);
   const [H, setH] = useState(0);
@@ -70,37 +71,57 @@ const ImageAnnotations = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Image Annotation</h1>
+      <header className="App-header">        
         {
-          selectedImageIndex===null && (
-            <input type="file" accept="image/*" onChange={handleImageUpload} multiple />
+          images.length===0 && (
+              <div className='flex flex-col space-y-4 items-center'>
+
+                  <input
+                  className='bg-transparent focus-none mt-8'
+                  type='text'
+                  onChange={(e)=>(setName(e.target.value))}
+                  placeholder='Enter Project Name'
+                  />
+
+                  <input type="file" accept="image/*" onChange={handleImageUpload} multiple 
+                  className='px-4 py-2 my-4 rounded-xl'
+                  />
+            
+            </div>
           )
           
         }
         
-        <div className="image-previews">
-          {
-            
-            images.map((image, index) => (
-            <div className='container'>
-            <img
-              key={index}
-              src={image}
-              alt={`Preview of ${index}th test image`}
-              className="main"
-              onClick={() => handleImageClick(index)}
-            />
-            </div>
-          ))
-          }
+        <div className="w-[1200px] flex flex-wrap mb-[40px] mx-auto">
+        
+           { 
+              images.length>0 &&(
+              <h1 className='font-bold text-xl text-center my-12 mx-auto'>
+              {name}
+              </h1>
+                )
+            }
+          <>
+            {
+              images.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`Preview of ${index}th test image`}
+                className="w-42 h-40 ml-8 my-8"
+                onClick={() => handleImageClick(index)}
+              />
+              
+            ))
+            }
+          </>
         </div>
         {selectedImageIndex !== null && (
           <>
             <Annotation
               src={images[selectedImageIndex]}
               alt='Uploaded Image'
-              className="selected"
+              className="w-[800px] h-[600px] mx-auto mt-[40px]"
               annotations={annotations}
               value={annotation}
               onChange={onChange}
