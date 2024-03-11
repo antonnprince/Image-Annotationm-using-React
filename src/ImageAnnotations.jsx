@@ -7,6 +7,8 @@ const ImageAnnotations = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [annotations, setAnnotations] = useState([]);
   const [annotation, setAnnotation] = useState({});
+  const[nextPage,setNextPage]= useState(false);
+  const[label,setLabel] = useState("")
   const[name,setName] = useState("")
   const [X, setX] = useState(0);
   const [Y, setY] = useState(0);
@@ -25,6 +27,8 @@ const ImageAnnotations = () => {
         imagePreviews.push(reader.result);
         if (imagePreviews.length === files.length) {
           setImages(imagePreviews);
+            // send images array to backend
+    console.log(images)
         }
       };
 
@@ -47,10 +51,11 @@ const ImageAnnotations = () => {
     const newAnnotation = {
       image: images[selectedImageIndex],
       geometry: { ...geometry },
+
       data: { ...data }
     };
 
-      console.log(images)
+  
     // Update X, Y, Height, and Width
     setX(geometry.x);
     setY(geometry.y);
@@ -59,9 +64,11 @@ const ImageAnnotations = () => {
 
     // Add new annotation to the array
     setAnnotations((prevAnnotations) => [...prevAnnotations, newAnnotation]);
+    setLabel(data.text)
   };
 
   const onSend = () => {
+    //send all label values of a single image to model
     const newObj = { ...annotations };
     console.log(newObj);
     setAnnotations([]);
@@ -71,38 +78,48 @@ const ImageAnnotations = () => {
 
   return (
     <div className="App">
-      <header className="App-header">        
-        {
-          images.length===0 && (
-              <div className='flex flex-col space-y-4 items-center'>
+      <header className="App-header"> 
 
-                  <input
-                  className='bg-transparent focus-none mt-8'
-                  type='text'
-                  onChange={(e)=>(setName(e.target.value))}
-                  placeholder='Enter Project Name'
-                  />
+         {  
+            nextPage===false && (
+              <>
+                <input
+                className='bg-transparent focus-none mt-8 p-2  focus:outline-none font-semibold'
+                type='text'
+                onChange={(e)=>(setName(e.target.value))}
+                placeholder='Enter Project Name'
+                />
 
-                  <input type="file" accept="image/*" onChange={handleImageUpload} multiple 
-                  className='px-4 py-2 my-4 rounded-xl'
-                  />
-            
-            </div>
+                <button onClick={()=>setNextPage(true)} className='bg-blue-300 px-4 py-2 rounded-xl'>
+                  Next
+                </button>
+              </>
           )
-          
         }
+
+        {
+       nextPage === true && (
+      <div className={`flex flex-col space-y-4 items-center ${images.length > 0 ? "hidden" : ""}`}>
+      <input 
+        type="file" 
+        accept="image/*" 
+        onChange={handleImageUpload} 
+        multiple 
+        className='px-4 py-2 my-4 rounded-xl'
+      />
+    </div>
+    ) 
+      }
+
+    {
+        images.length>0 && (
+          <h1 className='font-semibold text-3xl'>{name}</h1>
+        )
+      }
         
-        <div className="w-[1200px] flex flex-wrap mb-[40px] mx-auto">
-        
-           { 
-              images.length>0 &&(
-              <h1 className='font-bold text-xl text-center my-12 mx-auto'>
-              {name}
-              </h1>
-                )
-            }
-          <>
-            {
+
+      <div className="w-[1200px] flex flex-wrap mb-[40px] mx-auto"> 
+        {
               images.map((image, index) => (
               <img
                 key={index}
@@ -114,9 +131,10 @@ const ImageAnnotations = () => {
               
             ))
             }
-          </>
+          
         </div>
-        {selectedImageIndex !== null && (
+        {
+          selectedImageIndex !== null && (
           <>
             <Annotation
               src={images[selectedImageIndex]}
@@ -129,6 +147,15 @@ const ImageAnnotations = () => {
               allowTouch
             />
 
+
+              {/* <button className='bg-blue-200 px-8 py-4'
+              onClick={()=>{
+                annotation.data.text = label
+              }}
+              >
+                {label}
+              </button> */}
+
             <p>
               x: {X}
               <br />
@@ -139,7 +166,7 @@ const ImageAnnotations = () => {
               width: {W}
             </p>
 
-            <button onClick={onSend}>Send Annotations</button>
+            <button onClick={onSend} className="bg-blue-300 px-4 py-2 rounded-xl">Send Label to Model</button>
           </>
         )}
       </header>
