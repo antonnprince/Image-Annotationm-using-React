@@ -8,7 +8,7 @@ const ImageAnnotations = () => {
   const [annotations, setAnnotations] = useState([]);
   const [annotation, setAnnotation] = useState({});
   const[nextPage,setNextPage]= useState(false);
-  const[label,setLabel] = useState("")
+  const[labell,setLabel] = useState("")
   const[name,setName] = useState("")
   const [X, setX] = useState(0);
   const [Y, setY] = useState(0);
@@ -28,10 +28,10 @@ const ImageAnnotations = () => {
         if (imagePreviews.length === files.length) {
           setImages(imagePreviews);
             // send images array to backend
-    console.log(images)
+        console.log(imagePreviews)
         }
       };
-
+      
       reader.readAsDataURL(file);
     }
   };
@@ -40,9 +40,20 @@ const ImageAnnotations = () => {
     setSelectedImageIndex(index);
   };
 
-  const onChange = (annotation) => {
+const onChange = (annotation) => {
+  if (labell === "") {
     setAnnotation(annotation);
-  };
+  } else {
+    const newAnn = {
+      ...annotation,
+      data: {
+        text: labell,
+      }
+    };
+    setAnnotation(newAnn);
+  }
+};
+
 
   const onSubmit = (annotation) => {
     const { geometry, data } = annotation;
@@ -51,7 +62,6 @@ const ImageAnnotations = () => {
     const newAnnotation = {
       image: images[selectedImageIndex],
       geometry: { ...geometry },
-
       data: { ...data }
     };
 
@@ -142,20 +152,11 @@ const ImageAnnotations = () => {
               className="w-[800px] h-[600px] mx-auto mt-[40px]"
               annotations={annotations}
               value={annotation}
+
               onChange={onChange}
               onSubmit={onSubmit}
               allowTouch
             />
-
-
-              {/* <button className='bg-blue-200 px-8 py-4'
-              onClick={()=>{
-                annotation.data.text = label
-              }}
-              >
-                {label}
-              </button> */}
-
             <p>
               x: {X}
               <br />
@@ -166,7 +167,7 @@ const ImageAnnotations = () => {
               width: {W}
             </p>
 
-            <button onClick={onSend} className="bg-blue-300 px-4 py-2 rounded-xl">Send Label to Model</button>
+            <button onClick={onSend} className="bg-blue-300 px-4 py-2 rounded-xl">Train Model</button>
           </>
         )}
       </header>
