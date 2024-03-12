@@ -3,17 +3,17 @@ import Annotation from 'react-image-annotation';
 import './App.css';
 
 const ImageAnnotations = () => {
-  const [images, setImages] = useState([]);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
-  const [annotations, setAnnotations] = useState([]);
-  const [annotation, setAnnotation] = useState({});
-  const[nextPage,setNextPage]= useState(false);
-  const[labell,setLabel] = useState("")
-  const[name,setName] = useState("")
-  const [X, setX] = useState(0);
-  const [Y, setY] = useState(0);
-  const [H, setH] = useState(0);
-  const [W, setW] = useState(0);
+  const [images, setImages] = useState([]); //array of images
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null); //to set the index of image from images array for viewing
+  const [annotations, setAnnotations] = useState([]); //array containing all annotations
+  const [annotation, setAnnotation] = useState({});//single annotaion object
+  const[nextPage,setNextPage]= useState(false); //to change screen from name to file choosing
+  const[labell,setLabel] = useState("") //to autofill label field
+  const[name,setName] = useState("") //sets project name
+  const [X, setX] = useState(0); //sets x coordinate
+  const [Y, setY] = useState(0); //sets y coordinate
+  const [H, setH] = useState(0); //sets H
+  const [W, setW] = useState(0); //sets W
 
   const handleImageUpload = (event) => {
     const files = event.target.files;
@@ -77,13 +77,15 @@ const onChange = (annotation) => {
     setLabel(data.text)
   };
   const removeImage=(index)=>{
-      
     const newImages = [...images]
-
     newImages.splice(index,1)
     setImages(newImages)
   }
 
+  // sends updated image array value
+    const saveImages=()=>[
+      console.log(images)
+    ]
 
   const onSend = () => {
     //send all label values of a single image to model
@@ -151,7 +153,12 @@ const onChange = (annotation) => {
           ))}
       
       </div>
-      <button>Save Changes</button>
+            {
+          images.length>0 && (
+            <button className='bg-blue-300 px-4 py-2 rounded-x' onClick={saveImages}>Save Changes</button>
+            )
+            }
+     
         {
           selectedImageIndex !== null && (
           <>
@@ -176,6 +183,7 @@ const onChange = (annotation) => {
               width: {W}
             </p>
 
+            
             <button onClick={onSend} className="bg-blue-300 px-4 py-2 rounded-xl">Train Model</button>
           </>
         )}
