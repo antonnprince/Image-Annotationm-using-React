@@ -28,7 +28,7 @@ const ImageAnnotations = () => {
         if (imagePreviews.length === files.length) {
           setImages(imagePreviews);
             // send images array to backend
-        console.log(imagePreviews)
+       
         }
       };
       
@@ -76,6 +76,14 @@ const onChange = (annotation) => {
     setAnnotations((prevAnnotations) => [...prevAnnotations, newAnnotation]);
     setLabel(data.text)
   };
+  const removeImage=(index)=>{
+      
+    const newImages = [...images]
+
+    newImages.splice(index,1)
+    setImages(newImages)
+  }
+
 
   const onSend = () => {
     //send all label values of a single image to model
@@ -128,21 +136,22 @@ const onChange = (annotation) => {
       }
         
 
-      <div className="w-[1200px] flex flex-wrap mb-[40px] mx-auto"> 
-        {
-              images.map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                alt={`Preview of ${index}th test image`}
-                className="w-42 h-40 ml-8 my-8"
-                onClick={() => handleImageClick(index)}
-              />
-              
-            ))
-            }
-          
-        </div>
+      <div className="w-3/4 flex flex-wrap mb-[40px] mx-auto space-x-8 space-y-8"> 
+          {images.map((image, index) => (
+            <div className='flex flex-col space-y-1'>
+            <button className='text-xl font-bold border-2 border-black w-6 ' onClick={()=>removeImage(index)}>X</button>
+            <img
+              key={index}
+              src={image}
+              alt={`Preview of ${index}th test image`}
+              className="w-42 h-40 ml-8 my-8"
+              onClick={() => handleImageClick(index)}
+            />
+             </div>
+          ))}
+      
+      </div>
+      <button>Save Changes</button>
         {
           selectedImageIndex !== null && (
           <>
