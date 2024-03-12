@@ -41,9 +41,26 @@ const PreviousProjects = () => {
     setLabel(data.text)
   };
 
+  // sends updated image array value
+  const saveImages=()=>{
+    console.log(images)
+}
+    
+
+
   return (
     <div>
-      
+       <Annotation
+              //src={}
+              alt='Uploaded Image'
+              className="w-[800px] h-[600px] mx-auto mt-[40px]"
+              annotations={annotations}
+              value={annotation}
+
+              onChange={onChange}
+              onSubmit={onSubmit}
+              allowTouch
+            />
     </div>
   )
 }
