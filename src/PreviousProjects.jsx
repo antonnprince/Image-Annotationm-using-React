@@ -1,68 +1,74 @@
-import React from 'react'
+import React, { useState } from 'react';
 import Annotation from 'react-image-annotation';
+import human from "./human7.jpg"
 
-const PreviousProjects = () => {
-  const [annotations, setAnnotations] = useState([]); //array containing all annotations
-  const [annotation, setAnnotation] = useState({});//single annotaion object
-  const[labell,setLabel] = useState("")
+
+function App() {
+  const [annotations, setAnnotations] = useState([]);
+  const [annotation, setAnnotation] = useState({});
+  const[editImage, setEditImage] = useState(false);
 
   const onChange = (annotation) => {
-    if (labell === "") {
-      setAnnotation(annotation);
-    } else {
-      const newAnn = {
-        ...annotation,
-        data: {
-          text: labell,
-        }
-      };
-      setAnnotation(newAnn);
-    }
-  };
+    setAnnotation(annotation);
+  }
 
-  
   const onSubmit = (annotation) => {
     const { geometry, data } = annotation;
 
-    // Store current annotation values
-    const newAnnotation = {
-      image: images[selectedImageIndex],
-      geometry: { ...geometry },
-      data: { ...data }
-    };
-    //Update X, Y, Height, and Width
-    setX(geometry.x);
-    setY(geometry.y);
-    setH(geometry.height);
-    setW(geometry.width);
+    setAnnotation({});
+    setAnnotations([...annotations, {
+      geometry,
+      data: {
+        ...data,
+        id: Math.random()
+      }
+    }]);
+    console.log(annotation)
+  }
 
-    // Add new annotation to the array
-    setAnnotations((prevAnnotations) => [...prevAnnotations, newAnnotation]);
-    setLabel(data.text)
+  const onEdit = () => {
+    if (!editImage) {
+      const prevAnnotation = {
+        data: { text: 'aaaa' },
+        geometry: {
+          height: 23.6,
+          width: 30,
+          x: 43.5454,
+          y: 19.01901901901902,
+        }
+      };
+      setAnnotation(prevAnnotation);
+    } else {
+      setAnnotation({});
+      setAnnotations([]);
+    }
   };
-
-  // sends updated image array value
-  const saveImages=()=>{
-    console.log(images)
-}
-    
-
+  
 
   return (
-    <div>
-       <Annotation
-              //src={}
-              alt='Uploaded Image'
-              className="w-[800px] h-[600px] mx-auto mt-[40px]"
-              annotations={annotations}
-              value={annotation}
-
-              onChange={onChange}
-              onSubmit={onSubmit}
-              allowTouch
-            />
+    <div className="App">
+      <header className="App-header">
+  
+        <div className='w-1/2 h-1/4 mx-auto my-24'>
+        {onEdit}
+        <Annotation
+          src={human}
+          alt='Two pebbles anthropomorphized holding hands'
+          annotations={annotations}
+          value={annotation}
+          onChange={onChange}
+          onSubmit={onSubmit}
+          allowTouch
+        />
+        </div>
+        <button className='bg-sky-300 px-8 py-2 rounded-xl'
+        onClick={()=>setEditImage(true)}
+        >
+          Edit Image
+        </button>
+      </header>
     </div>
-  )
+  );
 }
 
-export default PreviousProjects
+export default App;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Annotation from 'react-image-annotation';
 import './App.css';
 
@@ -40,19 +40,21 @@ const ImageAnnotations = () => {
     setSelectedImageIndex(index);
   };
 
-const onChange = (annotation) => {
-  if (labell === "") {
-    setAnnotation(annotation);
-  } else {
-    const newAnn = {
-      ...annotation,
-      data: {
-        text: labell,
-      }
-    };
-    setAnnotation(newAnn);
-  }
-};
+  const onChange = (annotation) => {
+    if (labell === "") {
+      setAnnotation(annotation);
+    } else {
+      const newAnn = {
+        ...annotation,
+        data: {
+          text: labell,
+        }
+      };
+      setAnnotation(newAnn);
+    }
+  };
+  
+  
 
 
   const onSubmit = (annotation) => {
@@ -184,7 +186,7 @@ const onChange = (annotation) => {
             </p>
 
             
-            <button onClick={onSend} className="bg-blue-300 px-4 py-2 rounded-xl">Train Model</button>
+            <button onClick={onSend} className="bg-blue-300 px-4 py-2 rounded-xl">Save Label</button>
           </>
         )}
       </header>
