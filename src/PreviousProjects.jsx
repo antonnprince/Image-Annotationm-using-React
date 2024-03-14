@@ -1,74 +1,36 @@
-import React, { useState } from 'react';
-import Annotation from 'react-image-annotation';
-import human from "./human7.jpg"
+import React, { useRef, useEffect } from 'react';
+import human from './human7.jpg';
+import './App.css';
 
+const PreviousProjects = () => {
+  const canvasRef = useRef(null);
 
-function App() {
-  const [annotations, setAnnotations] = useState([]);
-  const [annotation, setAnnotation] = useState({});
-  const[editImage, setEditImage] = useState(false);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const image = new Image();
 
-  const onChange = (annotation) => {
-    setAnnotation(annotation);
-  }
+    image.onload = () => {
+      canvas.width = image.width; // Set canvas width to match image width
+      canvas.height = image.height; // Set canvas height to match image height
 
-  const onSubmit = (annotation) => {
-    const { geometry, data } = annotation;
-
-    setAnnotation({});
-    setAnnotations([...annotations, {
-      geometry,
-      data: {
-        ...data,
-        id: Math.random()
-      }
-    }]);
-    console.log(annotation)
-  }
-
-  const onEdit = () => {
-    if (!editImage) {
-      const prevAnnotation = {
-        data: { text: 'aaaa' },
-        geometry: {
-          height: 23.6,
-          width: 30,
-          x: 43.5454,
-          y: 19.01901901901902,
-        }
-      };
-      setAnnotation(prevAnnotation);
-    } else {
-      setAnnotation({});
-      setAnnotations([]);
-    }
-  };
-  
+      ctx.drawImage(image, 0, 0);
+      ctx.beginPath();
+      ctx.rect(48.046875, 21.63333336512248, 70, 30); // Define the rectangle position and dimensions
+      ctx.lineWidth = 2; // Set the line width
+      ctx.strokeStyle = 'red'; // Set the stroke color
+      ctx.stroke(); // Draw the rectangle
+    };
+    image.src = human;
+  }, []);
 
   return (
     <div className="App">
       <header className="App-header">
-  
-        <div className='w-1/2 h-1/4 mx-auto my-24'>
-        {onEdit}
-        <Annotation
-          src={human}
-          alt='Two pebbles anthropomorphized holding hands'
-          annotations={annotations}
-          value={annotation}
-          onChange={onChange}
-          onSubmit={onSubmit}
-          allowTouch
-        />
-        </div>
-        <button className='bg-sky-300 px-8 py-2 rounded-xl'
-        onClick={()=>setEditImage(true)}
-        >
-          Edit Image
-        </button>
+        <canvas ref={canvasRef} className='mx-auto my-12' style={{width:"300px", height: "200px" }}/>
       </header>
     </div>
   );
 }
 
-export default App;
+export default PreviousProjects;

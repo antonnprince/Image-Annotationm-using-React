@@ -25,3 +25,19 @@
   margin-bottom: 40px;
 }
 
+.rectangle {
+  position: absolute;
+  top: calc(19.444444444444446% * (currentImageHeight / originalImageHeight)); /* Adjusted top position */
+  left: calc(47.65625% * (currentImageWidth / originalImageWidth)); /* Adjusted left position */
+  width: calc(14.192708333333336% * (currentImageWidth / originalImageWidth)); /* Adjusted width */
+  height: calc(11.631944444444443% * (currentImageHeight / originalImageHeight)); /* Adjusted height */
+  border: 2px solid red; /* Border color and thickness */
+  box-sizing: border-box; /* Include border thickness in width and height */
+}
+
+.image-container {
+  position: relative;
+  display: inline-block; /* Ensures that the container only takes the necessary space */
+}
+
+
