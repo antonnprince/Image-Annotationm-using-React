@@ -163,11 +163,11 @@ const ImageAnnotations = () => {
      
         {
           selectedImageIndex !== null && (
-          <>
+          <div className='mx-auto w-auto h-auto ' style={{ display: 'inline-block', maxWidth: '50%', maxHeight: '25%' }}>
             <Annotation
               src={images[selectedImageIndex]}
               alt='Uploaded Image'
-              className="w-[800px] h-[600px] mx-auto mt-[40px]"
+              className="w-auto h-auto mt-[40px]"
               annotations={annotations}
               value={annotation}
 
@@ -187,7 +187,7 @@ const ImageAnnotations = () => {
 
             
             <button onClick={onSend} className="bg-blue-300 px-4 py-2 rounded-xl">Save Label</button>
-          </>
+          </div>
         )}
       </header>
     </div>
