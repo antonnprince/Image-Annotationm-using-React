@@ -11,49 +11,31 @@ const PreviousProjects = () => {
     const image = new Image();
 
     image.onload = () => {
-      const imageAspectRatio = image.width / image.height;
-      const canvasAspectRatio = canvas.width / canvas.height;
+      // Set canvas dimensions to match the image dimensions
+      canvas.width = image.width;
+      canvas.height = image.height;
 
-      let scale;
-      if (imageAspectRatio > canvasAspectRatio) {
-        scale = canvas.width / image.width;
-      } else {
-        scale = canvas.height / image.height;
-      }
+      // Draw the image on the canvas
+      ctx.drawImage(image, 0, 0);
 
-      setImageDimensions({ width: image.width , height: image.height  });
-      ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // Scale based on height to maintain aspect ratio
-
-      // Adjust coordinates based on scale
-      const scaledX = 47.5 * scale;
-      const scaledY = 21.6 * scale;
-
+      // Draw the rectangle on the canvas
+      const x = 47.53790283203125;
+      const y = 21.66241986338841;
+      const width = 13.400000000000006;
+      const height = 10.666666666666664;
       ctx.beginPath();
-      ctx.rect(scaledX, scaledY, 13.400000000000006, 10.666666666666664);
+      ctx.rect(x, y, width, height);
       ctx.lineWidth = 2;
       ctx.strokeStyle = 'red';
       ctx.stroke();
     };
 
     image.src = human;
-
-    const handleClick = (event) => {
-      const x = event.clientX; // X-coordinate of the mouse click relative to the viewport
-      const y = event.clientY; // Y-coordinate of the mouse click relative to the viewport
-      console.log('Mouse clicked at:', x, y);
-    };
-
-    document.addEventListener('mousedown', handleClick);
-
-    // Cleanup the event listener when the component unmounts
-    return () => {
-      document.removeEventListener('mousedown', handleClick);
-    };
   }, []);
-  
+
   return (
     <div className='w-auto h-auto' style={{ display: 'inline-block' }}>
-      <canvas ref={canvasRef} width={300} height={200} />
+      <canvas ref={canvasRef} />
     </div>
   );
 };
