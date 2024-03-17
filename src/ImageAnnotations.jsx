@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Annotation from 'react-image-annotation';
 import './App.css';
+import { Route,Routes,Link } from 'react-router-dom';
+
 
 const ImageAnnotations = () => {
   const [images, setImages] = useState([]); //array of images
@@ -66,18 +68,16 @@ const ImageAnnotations = () => {
       geometry: { ...geometry },
       data: { ...data }
     };
-
-  
     // Update X, Y, Height, and Width
     setX(geometry.x);
     setY(geometry.y);
     setH(geometry.height);
     setW(geometry.width);
-
     // Add new annotation to the array
     setAnnotations((prevAnnotations) => [...prevAnnotations, newAnnotation]);
     setLabel(data.text)
   };
+
   const removeImage=(index)=>{
     const newImages = [...images]
     newImages.splice(index,1)
@@ -141,21 +141,22 @@ const ImageAnnotations = () => {
         
 
       <div className="w-3/4 flex flex-wrap mb-[40px] mx-auto space-x-8 space-y-8"> 
-          {images.map((image, index) => (
-            <div className='flex flex-col space-y-1'>
-            <button className='text-xl font-bold border-2 border-black w-6 ' onClick={()=>removeImage(index)}>X</button>
-            <img
-              key={index}
-              src={image}
-              alt={`Preview of ${index}th test image`}
-              className="w-42 h-40 ml-8 my-8"
-              onClick={() => handleImageClick(index)}
-            />
-             </div>
-          ))}
-      
+  {
+    images.map((image, index) => (
+    <div key={index} className='flex flex-col space-y-1'>
+      <button className='text-xl font-bold border-2 border-black w-6 ' onClick={() => removeImage(index)}>X</button>
+        <img
+          src={image}
+          alt={`Preview of ${index}th test image`}
+          className={index===selectedImageIndex? "w-42 h-40 ml-8 my-8 z-20": "w-42 h-40 ml-8 my-8"}
+          onClick={() => handleImageClick(index)}
+        />
+      </div>  
+   ))}
+   
       </div>
-            {
+
+      {
           images.length>0 && (
             <button className='bg-blue-300 px-4 py-2 rounded-x' onClick={saveImages}>Save Changes</button>
             )
@@ -163,18 +164,19 @@ const ImageAnnotations = () => {
      
         {
           selectedImageIndex !== null && (
-          <div className='mx-auto w-auto h-auto ' style={{ display: 'inline-block', maxWidth: '50%', maxHeight: '25%' }}>
+          <div className=' w-auto h-auto' style={{display:'inline-block'}}>
+           
             <Annotation
               src={images[selectedImageIndex]}
               alt='Uploaded Image'
-              className="w-auto h-auto mt-[40px]"
+              className="w-auto h-auto mt-0 pt-0 mx-auto z-20"
               annotations={annotations}
               value={annotation}
-
               onChange={onChange}
               onSubmit={onSubmit}
               allowTouch
             />
+
             <p>
               x: {X}
               <br />

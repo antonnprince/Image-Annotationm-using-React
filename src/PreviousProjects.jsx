@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
-import human from './human7.jpg';
+import React, { useEffect, useState, useRef } from 'react';
+import human from "./human7.jpg";
 
 const PreviousProjects = () => {
   const canvasRef = useRef(null);
@@ -11,32 +11,51 @@ const PreviousProjects = () => {
     const image = new Image();
 
     image.onload = () => {
-      const width = image.naturalWidth;
-      const height = image.naturalHeight;
-      canvas.width = width;
-      canvas.height = height;
-      setImageDimensions({ width, height });
+      const imageAspectRatio = image.width / image.height;
+      const canvasAspectRatio = canvas.width / canvas.height;
 
-      ctx.drawImage(image, 0, 0, width, height);
+      let scale;
+      if (imageAspectRatio > canvasAspectRatio) {
+        scale = canvas.width / image.width;
+      } else {
+        scale = canvas.height / image.height;
+      }
+
+      setImageDimensions({ width: image.width , height: image.height  });
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height); // Scale based on height to maintain aspect ratio
+
+      // Adjust coordinates based on scale
+      const scaledX = 47.5 * scale;
+      const scaledY = 21.6 * scale;
+
       ctx.beginPath();
-      ctx.rect( 47.018229961395264 * 12, 22.152776188320583 * 7,15.234375 * 22,  9.375* 5);
-      ctx.lineWidth = 4;
+      ctx.rect(scaledX, scaledY, 13.400000000000006, 10.666666666666664);
+      ctx.lineWidth = 2;
       ctx.strokeStyle = 'red';
       ctx.stroke();
     };
 
     image.src = human;
+
+    const handleClick = (event) => {
+      const x = event.clientX; // X-coordinate of the mouse click relative to the viewport
+      const y = event.clientY; // Y-coordinate of the mouse click relative to the viewport
+      console.log('Mouse clicked at:', x, y);
+    };
+
+    document.addEventListener('mousedown', handleClick);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+    };
   }, []);
-
-  // 47.018229961395264 * 12, 22.152776188320583 * 10,15.234375 * 12, 9.375 * 5
-
+  
   return (
-    <div className="App">
-      <header className='mx-auto w-56 h-42' style={{ display: 'inline-block', maxWidth: '50%', maxHeight: '25%' }}>
-        <canvas ref={canvasRef} className=' w-64 h-56' />
-      </header>
+    <div className='w-auto h-auto' style={{ display: 'inline-block' }}>
+      <canvas ref={canvasRef} width={300} height={200} />
     </div>
   );
-}
+};
 
 export default PreviousProjects;
