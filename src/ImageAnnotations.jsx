@@ -164,12 +164,12 @@ const ImageAnnotations = () => {
      
         {
           selectedImageIndex !== null && (
-          <div className=' w-auto h-auto' style={{display:'inline-block'}}>
+          <div className=' w-64 h-56' style={{display:'inline-block'}}>
            
             <Annotation
               src={images[selectedImageIndex]}
               alt='Uploaded Image'
-              className="w-auto h-auto mt-0 pt-0 mx-auto z-20"
+              className="w-64 h-56 mt-0 pt-0 mx-auto z-20"
               annotations={annotations}
               value={annotation}
               onChange={onChange}
