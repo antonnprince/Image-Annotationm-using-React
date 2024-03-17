@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import human from "./human6.jfif";
-import Annotation from 'react-image-annotation';
+import human from "./mustang.jpg";
 
 const PreviousProjects = () => {
   const canvasRef = useRef(null);
@@ -15,42 +14,28 @@ const PreviousProjects = () => {
 
    useEffect(() => {
      const canvas = canvasRef.current;
-     const ctx = canvas.getContext('2d');
-     const image = new Image();
+      const ctx = canvas.getContext('2d');
+      const image = new Image();
 
-     image.onload = () => {
-       const scale = canvas.width / image.width;
+      image.onload = () => { 
+         image.width=canvas.width;
+         image.height=canvas.height;
+        //setImageDimensions({ width: image.width , height: image.height  });
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        const x =62.19444274902344 * 3;
+        const y = 47.77777099609375 * 1.5;
+        const width =  27* 3 ;
+        const height = 9.199999999999996* 1.5  ;
+        ctx.rect(x, y, width, height);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'red';
+        ctx.stroke();
+        console.log(image.height, image.width)
+      };
 
-      //  image.width=canvas.width;
-      //  image.height=canvas.height;
-       //setImageDimensions({ width: image.width , height: image.height  });
-       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-       ctx.beginPath();
-        //Adjust the coordinates based on the scaling factor
-        image.width = canvas.width;
-        image.height = canvas.height;
-       const x = 32.81391480515884   ;
-       const y = 15.112376963693178  ;
-       const width =  11.374325288425673 ;
-       const height = 18.90481820958808  ;
-       ctx.rect(x, y, width, height);
-       ctx.lineWidth = 2;
-       ctx.strokeStyle = 'red';
-       ctx.stroke();
-       console.log(image.height, image.width)
-
-       canvas.addEventListener('click', function(event) {
-        // Get the coordinates relative to the canvas
-        var rect = canvas.getBoundingClientRect();
-        var x = event.clientX - rect.left;
-        var y = event.clientY - rect.top;
-      
-        // Log the coordinates
-        console.log("Clicked at: (" + x + ", " + y + ")");
-    });
-     };
-
-     image.src = human;
+      image.src = human;
+    //let rectangle = interactive.rectangle(44.388885498046875,19.96296183268229,20,19.333333333333336)
    }, []);
 
 
@@ -99,8 +84,8 @@ const PreviousProjects = () => {
   //   setLabel(data.text)
   // };
   return (
-    <div className='' style={{ display: 'inline-block' }}>
-     
+    <div className='' style={{ display: 'inline-block' }} id="my-interactive">
+
     <canvas ref={canvasRef}  />    
             
             {/* <button onClick={onSend} className="bg-blue-300 px-4 py-2 rounded-xl">Save Label</button> */}

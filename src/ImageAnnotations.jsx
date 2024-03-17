@@ -61,22 +61,34 @@ const ImageAnnotations = () => {
 
   const onSubmit = (annotation) => {
     const { geometry, data } = annotation;
-
+  
     // Store current annotation values
     const newAnnotation = {
       image: images[selectedImageIndex],
       geometry: { ...geometry },
       data: { ...data }
     };
-    // Update X, Y, Height, and Width
-    setX(geometry.x);
-    setY(geometry.y);
-    setH(geometry.height);
-    setW(geometry.width);
+    
+    // Calculate scaled coordinates
+    const image = new Image();
+    image.src = images[selectedImageIndex];
+    image.onload = () => {
+      const scaledX = geometry.x * image.naturalWidth;
+      const scaledY = geometry.y * image.naturalHeight;
+  
+      // Update X, Y, Height, and Width
+      setX( geometry.x);
+      setY( geometry.y);
+      setH(geometry.height);
+      setW(geometry.width);
+      console.log(image.naturalWidth, image.naturalHeight)
+    };
+  
     // Add new annotation to the array
     setAnnotations((prevAnnotations) => [...prevAnnotations, newAnnotation]);
-    setLabel(data.text)
+    setLabel(data.text);
   };
+  
 
   const removeImage=(index)=>{
     const newImages = [...images]
@@ -164,12 +176,12 @@ const ImageAnnotations = () => {
      
         {
           selectedImageIndex !== null && (
-          <div className=' w-64 h-56' style={{display:'inline-block'}}>
+          <div style={{display:'inline-block',width: '400px', height: '300px'}}>
            
             <Annotation
               src={images[selectedImageIndex]}
               alt='Uploaded Image'
-              className="w-64 h-56 mt-0 pt-0 mx-auto z-20"
+              className="w-[400px] h-[300px] mt-0 pt-0 mx-auto z-20"
               annotations={annotations}
               value={annotation}
               onChange={onChange}
