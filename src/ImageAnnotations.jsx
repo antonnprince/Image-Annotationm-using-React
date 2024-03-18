@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import Annotation from 'react-image-annotation';
 import './App.css';
-import { Route,Routes,Link } from 'react-router-dom';
 
 
 const ImageAnnotations = () => {
@@ -16,6 +15,37 @@ const ImageAnnotations = () => {
   const [Y, setY] = useState(0); //sets y coordinate
   const [H, setH] = useState(0); //sets H
   const [W, setW] = useState(0); //sets W
+
+  // useEffect(() => {
+  //   const canvas = canvasRef.current;
+  //    const ctx = canvas.getContext('2d');
+  //    const image = new Image();
+
+  //    image.onload = () => { 
+  //       image.width=canvas.width;
+  //       image.height=canvas.height;
+  //      //setImageDimensions({ width: image.width , height: image.height  });
+  //      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+  //      ctx.beginPath();
+  //      const x =44.86370507326469 * 3;
+  //      const y = 17.283559163411457 * 1.5;
+  //      const width =  18.999998550415143* 3 ;
+  //      const height = 13.666666666666668* 1.5  ;
+  //      ctx.rect(x, y, width, height);
+  //      ctx.lineWidth = 2;
+  //      ctx.strokeStyle = 'red';
+  //      ctx.stroke();
+  //      console.log(image.height, image.width)
+  //    };
+
+  //    image.src = human;
+  //  //let rectangle = interactive.rectangle(44.388885498046875,19.96296183268229,20,19.333333333333336)
+  // }, []);
+
+  const onDraw=(images)=>{
+
+  }
+
 
   const handleImageUpload = (event) => {
     const files = event.target.files;
@@ -110,10 +140,18 @@ const ImageAnnotations = () => {
 
   };
 
-  return (
-    <div className="App">
-      <header className="App-header"> 
+  const handleCanvas = (canvas, image) => {
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, 300, 150); // Draw the image onto the canvas with the specified width and height
+    };
+    img.src = image;
+  };
+  
 
+  return (
+    <div className="App"> 
          {  
             nextPage===false && (
               <>
@@ -145,7 +183,8 @@ const ImageAnnotations = () => {
     ) 
       }
 
-    {
+    
+      {
         images.length>0 && (
           <h1 className='font-semibold text-3xl'>{name}</h1>
         )
@@ -153,18 +192,24 @@ const ImageAnnotations = () => {
         
 
       <div className="w-3/4 flex flex-wrap mb-[40px] mx-auto space-x-8 space-y-8"> 
-  {
-    images.map((image, index) => (
-    <div key={index} className='flex flex-col space-y-1'>
-      <button className='text-xl font-bold border-2 border-black w-6 ' onClick={() => removeImage(index)}>X</button>
-        <img
-          src={image}
-          alt={`Preview of ${index}th test image`}
-          className={index===selectedImageIndex? "w-42 h-40 ml-8 my-8 z-20": "w-42 h-40 ml-8 my-8"}
-          onClick={() => handleImageClick(index)}
-        />
-      </div>  
-   ))}
+    {
+      images.map((image, index) => (
+    
+        <div key={index} className='flex flex-col space-y-1'>
+  <button className='text-xl font-bold border-2 border-black w-6' onClick={() => removeImage(index)}>X</button>
+  <canvas
+    ref={(canvas) => canvas && handleCanvas(canvas, image)} // Check if canvas is not null before calling handleCanvas
+    alt={`Preview of ${index}th test image`}
+    className={index === selectedImageIndex ? "w-42 h-40 ml-8 my-8 z-20" : "w-42 h-40 ml-8 my-8"}
+    onClick={() => handleImageClick(index)}
+    width={300}
+    height={150}
+  />
+</div>
+
+  
+  ))
+}
    
       </div>
 
@@ -177,7 +222,6 @@ const ImageAnnotations = () => {
         {
           selectedImageIndex !== null && (
           <div style={{display:'inline-block',width: '400px', height: '300px'}}>
-           
             <Annotation
               src={images[selectedImageIndex]}
               alt='Uploaded Image'
@@ -203,7 +247,7 @@ const ImageAnnotations = () => {
             <button onClick={onSend} className="bg-blue-300 px-4 py-2 rounded-xl">Save Label</button>
           </div>
         )}
-      </header>
+      
     </div>
   );
 };
