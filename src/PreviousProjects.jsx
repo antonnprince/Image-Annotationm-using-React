@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import human from "./mustang.jpg";
+import human from "./human7.jpg";
 
 const PreviousProjects = () => {
   const canvasRef = useRef(null);
@@ -23,10 +23,10 @@ const PreviousProjects = () => {
         //setImageDimensions({ width: image.width , height: image.height  });
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
         ctx.beginPath();
-        const x =62.19444274902344 * 3;
-        const y = 47.77777099609375 * 1.5;
-        const width =  27* 3 ;
-        const height = 9.199999999999996* 1.5  ;
+        const x =44.86370507326469 * 3;
+        const y = 17.283559163411457 * 1.5;
+        const width =  18.999998550415143* 3 ;
+        const height = 13.666666666666668* 1.5  ;
         ctx.rect(x, y, width, height);
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'red';
