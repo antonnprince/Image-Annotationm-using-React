@@ -74,8 +74,10 @@ const ImageAnnotations = () => {
 
   const onChange = (annotation) => {
     if (labell === "") {
-      setAnnotation(annotation);
-    } else {
+      setAnnotation(annotation)
+    } 
+    else
+     {
       const newAnn = {
         ...annotation,
         data: {
@@ -98,22 +100,10 @@ const ImageAnnotations = () => {
       geometry: { ...geometry },
       data: { ...data }
     };
-    
-    // Calculate scaled coordinates
-    const image = new Image();
-    image.src = images[selectedImageIndex];
-    image.onload = () => {
-      const scaledX = geometry.x * image.naturalWidth;
-      const scaledY = geometry.y * image.naturalHeight;
-  
-      // Update X, Y, Height, and Width
       setX( geometry.x);
       setY( geometry.y);
       setH(geometry.height);
       setW(geometry.width);
-      console.log(image.naturalWidth, image.naturalHeight)
-    };
-  
     // Add new annotation to the array
     setAnnotations((prevAnnotations) => [...prevAnnotations, newAnnotation]);
     setLabel(data.text);
@@ -140,14 +130,23 @@ const ImageAnnotations = () => {
 
   };
 
-  const handleCanvas = (canvas, image) => {
+  const handleCanvas = (canvas, image, x, y, w, h, canvasId) => {
     const ctx = canvas.getContext('2d');
     const img = new Image();
     img.onload = () => {
       ctx.drawImage(img, 0, 0, 300, 150); // Draw the image onto the canvas with the specified width and height
+      if (canvas.id === canvasId) {
+        ctx.beginPath();
+        ctx.rect(x * 3.2, y * 1.6, w * 3.2, h * 1.6); // Use passed X, Y, W, and H values
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'red';
+        ctx.stroke();
+      }
     };
     img.src = image;
   };
+  
+  
   
 
   return (
@@ -198,13 +197,15 @@ const ImageAnnotations = () => {
         <div key={index} className='flex flex-col space-y-1'>
   <button className='text-xl font-bold border-2 border-black w-6' onClick={() => removeImage(index)}>X</button>
   <canvas
-    ref={(canvas) => canvas && handleCanvas(canvas, image)} // Check if canvas is not null before calling handleCanvas
-    alt={`Preview of ${index}th test image`}
-    className={index === selectedImageIndex ? "w-42 h-40 ml-8 my-8 z-20" : "w-42 h-40 ml-8 my-8"}
-    onClick={() => handleImageClick(index)}
-    width={300}
-    height={150}
-  />
+  id={`canvas-${index}`}
+  ref={(canvas) => canvas && handleCanvas(canvas, image, X, Y, W, H, `canvas-${index}`)} // Pass X, Y, W, and H values to handleCanvas
+  alt={`Preview of ${index}th test image`}
+  className={index === selectedImageIndex ? "w-42 h-40 ml-8 my-8 z-20" : "w-42 h-40 ml-8 my-8"}
+  onClick={() => handleImageClick(index)}
+  width={300}
+  height={150}
+/>
+{console.log(`canvas-${index}`)}
 </div>
 
   
@@ -244,7 +245,7 @@ const ImageAnnotations = () => {
             </p>
 
             
-            <button onClick={onSend} className="bg-blue-300 px-4 py-2 rounded-xl">Save Label</button>
+            <button onClick={(canvas) => { onSend(); canvas && drawRect(canvas, images[selectedImageIndex]); }} className="bg-blue-300 px-4 py-2 rounded-xl">Save Label</button>
           </div>
         )}
       
